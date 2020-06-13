@@ -83,12 +83,10 @@ namespace Gtk4ListClock {
             /* Here we bind the item itself to a GdkPicture.
              * This is simply done by using the clock expression itself.
              */
-            // var picture = new Gtk.Picture ();
-            // var obj = clock_expression.get_value_type ();
-            // clock_expression.bind (picture, "paintable", picture);
-            // box.append (picture);
-            expression = new Gtk.ObjectExpression (clock_expression);
-
+            var picture = new Gtk.Picture ();
+            clock_expression.bind (picture, "paintable", picture);
+            box.append (picture);
+            
             /* And finally, everything comes together.
              * We create a label for displaying the time as text.
              * For that, we need to transform the "GDateTime" of the
