@@ -35,7 +35,6 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
     public Clock (string location, TimeZone ? time_zone = null) {
         this.location = location;
         this.time_zone = time_zone;
-        this.set_size_request (100, 100);
         start_ticking ();
     }
 
@@ -129,8 +128,10 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
                                   out int natural,
                                   out int minimum_baseline,
                                   out int natural_baseline) {
+        if (orientation == Gtk.Orientation.HORIZONTAL) {
+        }
         minimum = 100;
-        natural = 100;
+        natural = 120;
         minimum_baseline = -1;
         natural_baseline = -1;
     }
@@ -155,6 +156,7 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
             /* We will now return a different value for the time porperty,
              * so notify about that.
              */
+            clock.notify_property ("time-to-string");
             clock.notify_property ("time");
             /* We will also draw the hands of the clock differently.
              * So notify about that, too.

@@ -54,7 +54,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         grid_view.set_hscroll_policy (Gtk.ScrollablePolicy.NATURAL);
         grid_view.set_vscroll_policy (Gtk.ScrollablePolicy.NATURAL);
 
-        var selection = new Gtk.SingleSelection (clocks_list_store);
+        var selection = new Gtk.NoSelection (clocks_list_store);
         grid_view.set_model (selection);
 
         scrolled_win.set_child (grid_view);
@@ -95,7 +95,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
          * For that, we need to transform the "GDateTime" of the
          * time property into a string so that the label can display it.
          */
-        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression, "time_to_string");
+        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression, "time-to-string");
 
         /* Now create the label and bind the expression to it. */
         var time_label = new Gtk.Label (null);
