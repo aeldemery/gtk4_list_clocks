@@ -38,7 +38,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         this.set_title ("Clocks");
         this.set_default_size (600, 400);
 
-        var scrolled_win = new Gtk.ScrolledWindow (null, null);
+        var scrolled_win = new Gtk.ScrolledWindow ();
         this.set_child (scrolled_win);
 
         /* Create the factory that creates the listitems. Because we
@@ -75,7 +75,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         /* Bind the clock's location to a label.
          * This is easy: We just get the "location" property of the clock.
          */
-        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression, "location");
+        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression.ref(), "location");
 
         /* Now create the label and bind the expression to it. */
         var location_label = new Gtk.Label (null);
