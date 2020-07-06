@@ -1,6 +1,15 @@
 
 public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
 
+    private unowned Clock instance {
+        get {
+            return this;
+        }
+        set {
+            instance = value;
+        }
+    }
+
     /* We allow this to be NULL for the local timezone */
     public GLib.TimeZone ? time_zone { get; set; }
 
@@ -14,7 +23,7 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
     public string location { get; set; }
 
     /* This is the list of all the ticking clocks */
-    static GLib.SList<Clock> ticking_clocks = null;
+    static Gee.ArrayList<Clock> ticking_clocks = null;
 
     /* This is the ID of the timeout source that is updating all
      * ticking clocks.
@@ -22,7 +31,7 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
     static uint ticking_clock_id = 0;
 
     construct {
-        ticking_clocks = new GLib.SList<Clock> ();
+        ticking_clocks = new Gee.ArrayList<Clock> ();
     }
 
     public Clock (string location, TimeZone ? time_zone = null) {
@@ -157,6 +166,7 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
              * so notify about that.
              */
             clock.notify_property ("time");
+            //print("%p\n", clock);
             /* We will also draw the hands of the clock differently.
              * So notify about that, too.
              */
@@ -166,11 +176,12 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
     }
 
     void stop_ticking () {
-        ticking_clocks.remove (this);
+        ticking_clocks.remove (instance);
         /* If no clock is remaining, stop running the tick updates */
-        if (ticking_clocks.length () == 0 && ticking_clock_id != 0) {
+        if (ticking_clocks.size == 0 && ticking_clock_id != 0) {
             GLib.Source.remove (ticking_clock_id);
         }
+        print ("stop ticking\n");
     }
 
     void start_ticking () {
@@ -178,8 +189,9 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
         if (ticking_clock_id == 0) {
             ticking_clock_id = GLib.Timeout.add_seconds (1, tick);
         }
-        ticking_clocks.prepend (this);
-        // print ("%p\n", this);
+        ticking_clocks.add (instance); // Bug
+        print ("Clock instance %p\n", instance);
+        print ("Number of ticking clocks %d\n", ticking_clocks.size);
     }
 
     ~Clock () {

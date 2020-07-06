@@ -15,6 +15,7 @@ dependencies = [
     dependency ('glib-2.0'),
     dependency ('gobject-2.0'),
     dependency ('gtk4', version: '>=3.98.5'),
+    dependency ('gee-0.8'),
 ]
 
 executable (
