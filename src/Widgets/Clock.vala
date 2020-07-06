@@ -1,15 +1,6 @@
 
 public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
 
-    private unowned Clock instance {
-        get {
-            return this;
-        }
-        set {
-            instance = value;
-        }
-    }
-
     /* We allow this to be NULL for the local timezone */
     public GLib.TimeZone ? time_zone { get; set; }
 
@@ -30,7 +21,7 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
      */
     static uint ticking_clock_id = 0;
 
-    construct {
+    static construct {
         ticking_clocks = new Gee.ArrayList<Clock> ();
     }
 
@@ -126,20 +117,6 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
         gtksnapshot.restore ();
     }
 
-    // public override void measure (Gtk.Orientation orientation,
-    // int for_size,
-    // out int minimum,
-    // out int natural,
-    // out int minimum_baseline,
-    // out int natural_baseline) {
-    // if (orientation == Gtk.Orientation.HORIZONTAL) {
-    // }
-    // minimum = 100;
-    // natural = 120;
-    // minimum_baseline = -1;
-    // natural_baseline = -1;
-    // }
-
     public int get_intrinsic_height () {
         return 100;
     }
@@ -180,24 +157,18 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
         if (ticking_clock_id == 0) {
             ticking_clock_id = GLib.Timeout.add_seconds (1, tick);
         }
-        ticking_clocks.add (instance); // Bug
-        // Although instance pointer is different according to the number of instantiated objects!!!
-        print ("Clock instance %p\n", instance);
-        // always 1 !!!
-        print ("Number of ticking clocks %d\n", ticking_clocks.size);
+        ticking_clocks.add (this);
     }
 
     void stop_ticking () {
-        ticking_clocks.remove (instance);
+        ticking_clocks.remove (this);
         /* If no clock is remaining, stop running the tick updates */
         if (ticking_clocks.size == 0 && ticking_clock_id != 0) {
             GLib.Source.remove (ticking_clock_id);
         }
-        print ("stop ticking\n");
     }
 
     ~Clock () {
         stop_ticking ();
-        // print ("Destructor\n");
     }
 }
