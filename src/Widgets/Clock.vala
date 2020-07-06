@@ -184,16 +184,6 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
         print ("stop ticking\n");
     }
 
-    void start_ticking () {
-        /* if no clock is ticking yet, start */
-        if (ticking_clock_id == 0) {
-            ticking_clock_id = GLib.Timeout.add_seconds (1, tick);
-        }
-        ticking_clocks.add (instance); // Bug
-        print ("Clock instance %p\n", instance);
-        print ("Number of ticking clocks %d\n", ticking_clocks.size);
-    }
-
     ~Clock () {
         stop_ticking ();
         // print ("Destructor\n");
