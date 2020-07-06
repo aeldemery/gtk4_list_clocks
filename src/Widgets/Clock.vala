@@ -1,5 +1,5 @@
 
-public class Gtk4ListClock.Clock : Gtk.DrawingArea {
+public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
 
     /* We allow this to be NULL for the local timezone */
     public GLib.TimeZone ? time_zone { get; set; }
@@ -10,18 +10,11 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
         }
     }
 
-
-    public string time_to_string {
-        owned get {
-            return this.time.format ("%x\n%X");
-        }
-    }
-
     /* Name of the location we're displaying time for */
     public string location { get; set; }
 
     /* This is the list of all the ticking clocks */
-    GLib.SList<Clock> ticking_clocks = null;
+    static GLib.SList<Clock> ticking_clocks = null;
 
     /* This is the ID of the timeout source that is updating all
      * ticking clocks.
@@ -43,11 +36,12 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
      * It also allows demonstrating how to directly use objects in the
      * listview later by making this object do something interesting.
      */
-    public override void snapshot (Gtk.Snapshot snapshot) {
+    public void snapshot (Gdk.Snapshot snapshot, double width, double height) {
         Gsk.RoundedRect outline = {};
 
-        var width = this.get_width ();
-        var height = this.get_height ();
+        var w = (float) width;
+        var h = (float)height;
+        var gtksnapshot = (Gtk.Snapshot)snapshot;
 
         Gdk.RGBA black = { 0, 0, 0, 1 };
 
@@ -56,12 +50,12 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
         /* save/restore() is necessary so we can undo the transforms we start
          * out with.
          */
-        snapshot.save ();
+        gtksnapshot.save ();
 
         /* First, we move the (0, 0) point to the center of the area so
          * we can draw everything relative to it.
          */
-        snapshot.translate ({ width / 2, height / 2 });
+        gtksnapshot.translate ({ w / 2, h / 2 });
 
         /* Next we scale it, so that we can pretend that the clock is
          * 100px in size. That way, we don't need to do any complicated
@@ -69,7 +63,8 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
          * dimension for sizing. That way we don't overdraw but keep
          * the aspect ratio.
          */
-        snapshot.scale (float.min (width, height) / 100.0f, float.min (width, height) / 100.0f);
+        gtksnapshot.scale (float.min (w, h) /
+                           100.0f, float.min (w, h) / 100.0f);
 
         /* Now we have a circle with diameter 100px (and radius 50px) that
          * has its (0, 0) point at the center. Let's draw a simple clock into it.
@@ -80,7 +75,7 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
          * without requiring Cairo.
          */
         outline.init_from_rect ({ { -50, -50 }, { 100, 100 } }, 50f);
-        snapshot.append_border (outline, /*Width of each boarder */ { 4, 4, 4, 4 }, { black, black, black, black });
+        gtksnapshot.append_border (outline, /*Width of each boarder */ { 4, 4, 4, 4 }, { black, black, black, black });
 
         /* Next, draw the hour hand.
          * We do this using tranforms again: Instead of computing where the angle
@@ -88,55 +83,60 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
          * was :00. We don't even need to care about am/pm here because rotations
          * just work.
          */
-        snapshot.save ();
-        snapshot.rotate (30 * now.get_hour () + 0.5f * now.get_minute ());
+        gtksnapshot.save ();
+        gtksnapshot.rotate (30 * now.get_hour () + 0.5f * now.get_minute ());
         outline.init_from_rect ({ { -2, -23 }, { 4, 25 } }, 2f);
-        snapshot.push_rounded_clip (outline);
-        snapshot.append_color (black, outline.bounds);
-        snapshot.pop ();
-        snapshot.restore ();
+        gtksnapshot.push_rounded_clip (outline);
+        gtksnapshot.append_color (black, outline.bounds);
+        gtksnapshot.pop ();
+        gtksnapshot.restore ();
 
         /* And the same as above for the minute hand. Just make this one longer
          * so people can tell the hands apart.
          */
-        snapshot.save ();
-        snapshot.rotate (6 * now.get_minute ());
+        gtksnapshot.save ();
+        gtksnapshot.rotate (6 * now.get_minute ());
         outline.init_from_rect ({ { -2, -43 }, { 4, 45 } }, 2f);
-        snapshot.push_rounded_clip (outline);
-        snapshot.append_color (black, outline.bounds);
-        snapshot.pop ();
-        snapshot.restore ();
+        gtksnapshot.push_rounded_clip (outline);
+        gtksnapshot.append_color (black, outline.bounds);
+        gtksnapshot.pop ();
+        gtksnapshot.restore ();
 
         /* and finally, the second indicator. */
-        snapshot.save ();
-        snapshot.rotate (6 * now.get_second ());
+        gtksnapshot.save ();
+        gtksnapshot.rotate (6 * now.get_second ());
         outline.init_from_rect ({ { -2, -43 }, { 4, 10 } }, 2f);
-        snapshot.push_rounded_clip (outline);
-        snapshot.append_color (black, outline.bounds);
-        snapshot.pop ();
-        snapshot.restore ();
+        gtksnapshot.push_rounded_clip (outline);
+        gtksnapshot.append_color (black, outline.bounds);
+        gtksnapshot.pop ();
+        gtksnapshot.restore ();
 
         /* And finally, don't forget to restore the initial save() that
          * we did for the initial transformations.
          */
-        snapshot.restore ();
+        gtksnapshot.restore ();
     }
 
-    public override void measure (Gtk.Orientation orientation,
-                                  int for_size,
-                                  out int minimum,
-                                  out int natural,
-                                  out int minimum_baseline,
-                                  out int natural_baseline) {
-        if (orientation == Gtk.Orientation.HORIZONTAL) {
-        }
-        minimum = 100;
-        natural = 120;
-        minimum_baseline = -1;
-        natural_baseline = -1;
+    // public override void measure (Gtk.Orientation orientation,
+    // int for_size,
+    // out int minimum,
+    // out int natural,
+    // out int minimum_baseline,
+    // out int natural_baseline) {
+    // if (orientation == Gtk.Orientation.HORIZONTAL) {
+    // }
+    // minimum = 100;
+    // natural = 120;
+    // minimum_baseline = -1;
+    // natural_baseline = -1;
+    // }
+
+    public int get_intrinsic_height () {
+        return 100;
     }
 
-    public override void size_allocate (int width, int height, int baseline) {
+    public int get_intrinsic_width () {
+        return 100;
     }
 
     /* This function returns the current time in the clock's timezone. */
@@ -156,12 +156,11 @@ public class Gtk4ListClock.Clock : Gtk.DrawingArea {
             /* We will now return a different value for the time porperty,
              * so notify about that.
              */
-            clock.notify_property ("time-to-string");
             clock.notify_property ("time");
             /* We will also draw the hands of the clock differently.
              * So notify about that, too.
              */
-            clock.queue_draw ();
+            clock.invalidate_contents ();
         }
         return GLib.Source.CONTINUE;
     }

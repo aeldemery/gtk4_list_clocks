@@ -48,7 +48,6 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
          */
         var factory = new Gtk.SignalListItemFactory ();
         factory.setup.connect (setup_listitem_cb);
-        factory.bind.connect (bind_listitem_cb);
 
         var grid_view = new Gtk.GridView.with_factory (factory);
         grid_view.set_hscroll_policy (Gtk.ScrollablePolicy.NATURAL);
@@ -75,7 +74,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         /* Bind the clock's location to a label.
          * This is easy: We just get the "location" property of the clock.
          */
-        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression.ref(), "location");
+        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression, "location");
 
         /* Now create the label and bind the expression to it. */
         var location_label = new Gtk.Label (null);
@@ -85,9 +84,9 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         /* Here we bind the item itself to a GdkPicture.
          * This is simply done by using the clock expression itself.
          */
-        var frame = new Gtk.Frame ("");
-        // clock_expression.bind (picture, "paintable", picture);
-        box.append (frame);
+        var picture = new Gtk.Picture ();
+        clock_expression.bind (picture, "paintable", picture);
+        box.append (picture);
 
 
         /* And finally, everything comes together.
@@ -95,7 +94,8 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
          * For that, we need to transform the "GDateTime" of the
          * time property into a string so that the label can display it.
          */
-        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression, "time-to-string");
+        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression, "time");
+        expression = new Gtk.CClosureExpression(typeof(string), null, {expression}, (Callback)convert_time_to_string, null, null);
 
         /* Now create the label and bind the expression to it. */
         var time_label = new Gtk.Label (null);
@@ -103,9 +103,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         box.append (time_label);
     }
 
-    void bind_listitem_cb (Gtk.ListItemFactory factroy, Gtk.ListItem item) {
-        var clock = item.get_item () as Clock;
-        var frame = item.get_child ().get_first_child ().get_next_sibling () as Gtk.Frame;
-        frame.set_child (clock);
+    public static string convert_time_to_string (Object image, DateTime time) {
+        return time.format ("%x\n%X");
     }
 }
