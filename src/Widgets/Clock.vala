@@ -49,7 +49,7 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
         Gsk.RoundedRect outline = {};
 
         var w = (float) width;
-        var h = (float)height;
+        var h = (float) height;
         var gtksnapshot = (Gtk.Snapshot)snapshot;
 
         Gdk.RGBA black = { 0, 0, 0, 1 };
@@ -166,13 +166,25 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
              * so notify about that.
              */
             clock.notify_property ("time");
-            //print("%p\n", clock);
+            // print("%p\n", clock);
             /* We will also draw the hands of the clock differently.
              * So notify about that, too.
              */
             clock.invalidate_contents ();
         }
         return GLib.Source.CONTINUE;
+    }
+
+    void start_ticking () {
+        /* if no clock is ticking yet, start */
+        if (ticking_clock_id == 0) {
+            ticking_clock_id = GLib.Timeout.add_seconds (1, tick);
+        }
+        ticking_clocks.add (instance); // Bug
+        // Although instance pointer is different according to the number of instantiated objects!!!
+        print ("Clock instance %p\n", instance);
+        // always 1 !!!
+        print ("Number of ticking clocks %d\n", ticking_clocks.size);
     }
 
     void stop_ticking () {
