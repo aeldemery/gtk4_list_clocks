@@ -49,12 +49,11 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         var factory = new Gtk.SignalListItemFactory ();
         factory.setup.connect (setup_listitem_cb);
 
-        var grid_view = new Gtk.GridView.with_factory (factory);
+        var selection = new Gtk.NoSelection (clocks_list_store);
+
+        var grid_view = new Gtk.GridView (selection, factory);
         grid_view.set_hscroll_policy (Gtk.ScrollablePolicy.NATURAL);
         grid_view.set_vscroll_policy (Gtk.ScrollablePolicy.NATURAL);
-
-        var selection = new Gtk.NoSelection (clocks_list_store);
-        grid_view.set_model (selection);
 
         scrolled_win.set_child (grid_view);
     }
@@ -74,7 +73,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         /* Bind the clock's location to a label.
          * This is easy: We just get the "location" property of the clock.
          */
-        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression.ref(), "location");
+        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression.ref (), "location");
 
         /* Now create the label and bind the expression to it. */
         var location_label = new Gtk.Label (null);
@@ -84,7 +83,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         /* Here we bind the item itself to a GdkPicture.
          * This is simply done by using the clock expression itself.
          */
-        expression = clock_expression.ref();
+        expression = clock_expression.ref ();
         var picture = new Gtk.Picture ();
         expression.bind (picture, "paintable", picture);
         box.append (picture);
@@ -95,8 +94,8 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
          * For that, we need to transform the "GDateTime" of the
          * time property into a string so that the label can display it.
          */
-        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression.ref(), "time");
-        expression = new Gtk.CClosureExpression(typeof(string), null, {expression}, (Callback)convert_time_to_string, null, null);
+        expression = new Gtk.PropertyExpression (typeof (Clock), clock_expression.ref (), "time");
+        expression = new Gtk.CClosureExpression (typeof (string), null, { expression }, (Callback) convert_time_to_string, null, null);
 
         /* Now create the label and bind the expression to it. */
         var time_label = new Gtk.Label (null);
