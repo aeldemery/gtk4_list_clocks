@@ -1,5 +1,15 @@
 
 public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
+    string[] time_zones = new string[] {
+        "San Francisco", "America/Los_Angeles",
+        "Xalapa", "America/Mexico_City",
+        "Boston", "America/New_York",
+        "London", "Europe/London",
+        "Berlin", "Europe/Berlin",
+        "Moscow", "Europe/Moscow",
+        "New Delhi", "Asia/Kolkata",
+        "Shanghai", "Asia/Shanghai",
+    };
     // GLib.ListStore clocks_list_store;
     public MainWindow (Gtk.Application app) {
         Object (application: app);
@@ -17,22 +27,17 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         clocks_list_store.append (clock);
 
         /* A bunch of timezones with GTK hackers */
-        clock = new Clock ("San Francisco", new TimeZone ("America/Los_Angeles"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("Xalapa", new TimeZone ("America/Mexico_City"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("Boston", new TimeZone ("America/New_York"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("London", new TimeZone ("Europe/London"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("Berlin", new TimeZone ("Europe/Berlin"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("Moscow", new TimeZone ("Europe/Moscow"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("New Delhi", new TimeZone ("Asia/Kolkata"));
-        clocks_list_store.append (clock);
-        clock = new Clock ("Shanghai", new TimeZone ("Asia/Shanghai"));
-        clocks_list_store.append (clock);
+        try {
+            for (var i = 0; i < time_zones.length; i++) {
+                clock = new Clock (time_zones[i], new TimeZone.identifier (time_zones[i + 1]));
+                clocks_list_store.append (clock);
+                // go to the next line
+                i++;
+            }
+        } catch (GLib.Error err) {
+            GLib.error ("Gould not parse time zones: %s\n", err.message);
+        }
+        
 
         // var clock_list_item_factory = new GLib.Factor
         this.set_title ("Clocks");
