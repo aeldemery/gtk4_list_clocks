@@ -1,3 +1,8 @@
+// Copyright (c) 2021 Ahmed Eldemery
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 int main () {
     var countries_flags = new Gee.HashMap<string, string> ();
     countries_flags.set ("AD", "🇦🇩");

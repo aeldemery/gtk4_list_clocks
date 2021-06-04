@@ -1,3 +1,8 @@
+// Copyright (c) 2021 Ahmed Eldemery
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 public class Gtk4ListClock.TimezonesListModel : GLib.Object, GLib.ListModel {
     Gee.ArrayList<TimezoneInfo> entries = new Gee.ArrayList<TimezoneInfo>();
 

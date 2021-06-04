@@ -1,3 +1,8 @@
+// Copyright (c) 2021 Ahmed Eldemery
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 public class Gtk4ListClock.ClockInfoDisplay : Gtk.Widget {
     Gtk.Label flags_label;
     Gtk.Label time_zone_label;

@@ -1,3 +1,8 @@
+// Copyright (c) 2021 Ahmed Eldemery
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 /**
  * see https://github.com/thekelvinliu/country-code-emoji
  */

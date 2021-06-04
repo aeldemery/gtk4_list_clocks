@@ -1,3 +1,8 @@
+// Copyright (c) 2021 Ahmed Eldemery
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 public class Gtk4ListClock.TimezoneInfo : GLib.Object {
     public TimezoneInfo (string countries, string coordinates, string timezone, string ? comments = null) {
         this.coordinates = coordinates;
