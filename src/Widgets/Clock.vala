@@ -41,7 +41,7 @@ public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
 
         var w = (float) width;
         var h = (float) height;
-        var gtksnapshot = (Gtk.Snapshot)snapshot;
+        var gtksnapshot = (Gtk.Snapshot) snapshot;
 
         Gdk.RGBA black = { 0, 0, 0, 1 };
 
