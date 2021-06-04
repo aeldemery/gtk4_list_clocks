@@ -8,7 +8,6 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-
 public class Gtk4ListClock.ClockApp : Gtk.Application {
     // Member variables
 

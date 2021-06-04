@@ -4,7 +4,7 @@ public class Gtk4ListClock.TimezonesListModel : GLib.Object, GLib.ListModel {
     public TimezonesListModel () {
         try {
             var data = GLib.resources_lookup_data (
-                "/listclocks/data/zone1970.tab",
+                "/listclocks/Data/zone1970.tab",
                 GLib.ResourceLookupFlags.NONE
             );
 

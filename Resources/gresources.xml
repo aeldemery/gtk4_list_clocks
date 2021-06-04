@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
     <gresource prefix="/listclocks">
-        <file>data/zone1970.tab</file>
+        <file>Data/zone1970.tab</file>
     </gresource>
 </gresources>

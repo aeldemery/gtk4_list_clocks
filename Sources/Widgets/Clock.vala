@@ -1,3 +1,7 @@
+// Copyright (c) 2021 Ahmed Eldemery
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
 
 public class Gtk4ListClock.Clock : GLib.Object, Gdk.Paintable {
 
