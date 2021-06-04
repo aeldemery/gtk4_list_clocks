@@ -23,10 +23,7 @@ public class Gtk4ListClock.ClockInfoDisplay : Gtk.Widget {
         vbox.append (clock_face);
         vbox.append (time_label);
 
-        var constant_expression = new Gtk.ConstantExpression (typeof (ClockFace));
-        var property_expression = new Gtk.PropertyExpression (typeof (ClockFace), constant_expression, "time");
-        property_expression.bind (time_label, "label", time_label);
-
+        
         vbox.set_parent (this);
     }
 
@@ -44,7 +41,10 @@ public class Gtk4ListClock.ClockInfoDisplay : Gtk.Widget {
         flags_label.label = flags;
 
         clock_face.set_time_zone (info.timezone);
-        // time_label.label = clock_face.time;
+
+        var object_expression = new Gtk.ObjectExpression (clock_face);
+        var property_expression = new Gtk.PropertyExpression (typeof (ClockFace), object_expression, "time");
+        property_expression.bind (time_label, "label", time_label);
     }
 
     protected override void dispose () {
