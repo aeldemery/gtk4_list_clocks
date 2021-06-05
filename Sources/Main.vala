@@ -27,10 +27,10 @@ public class Gtk4ListClock.ClockApp : Gtk.Application {
     }
 
     protected override void open (GLib.File[] files, string hint) {
-    }
+    }    
+}
 
-    static int main (string[] args) {
-        var my_app = new ClockApp ();
-        return my_app.run (args);
-    }
+int main (string[] args) {
+    var my_app = new Gtk4ListClock.ClockApp ();
+    return my_app.run (args);
 }
