@@ -10,6 +10,10 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
     }
 
     construct {
+        var css_provider = new Gtk.CssProvider ();
+        css_provider.load_from_resource ("/listclocks/Styles/Application.css");
+        Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+
         var clocks_list_model = new TimezonesListModel ();
 
         // var clock_list_item_factory = new GLib.Factor
@@ -31,6 +35,7 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
         var selection = new Gtk.NoSelection (clocks_list_model);
 
         var grid_view = new Gtk.GridView (selection, factory);
+        grid_view.max_columns = 12;
         grid_view.set_hscroll_policy (Gtk.ScrollablePolicy.NATURAL);
         grid_view.set_vscroll_policy (Gtk.ScrollablePolicy.NATURAL);
 
