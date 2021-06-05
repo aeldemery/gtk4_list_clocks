@@ -1,0 +1,15 @@
+.outline {
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(63, 29, 4);
+}
+
+.enormous {
+  font-size: 40px;
+  background: linear-gradient(360deg, #d64759 10%, #da7352 360%);
+}
+
+.time-zone {
+  font-size: 16px;
+  font-weight: bold;
+}
