@@ -3,7 +3,6 @@ sources = files (
         'Main.vala',
         'MainWindow.vala',
         
-        'Widgets/Clock.vala',
         'Widgets/ClockFace.vala',
         'Widgets/ClockInfoDisplay.vala',
 
