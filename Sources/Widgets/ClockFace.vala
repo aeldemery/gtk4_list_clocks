@@ -169,7 +169,7 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         out int minimum_baseline, 
         out int natural_baseline) {
             minimum = 100;
-            natural = 200;
+            natural = 100;
             minimum_baseline = natural_baseline = -1;
     }
 }
