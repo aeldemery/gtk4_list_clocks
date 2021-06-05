@@ -2,5 +2,6 @@
 <gresources>
     <gresource prefix="/listclocks">
         <file>Data/zone1970.tab</file>
+        <file>Styles/Application.css</file>
     </gresource>
 </gresources>
