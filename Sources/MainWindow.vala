@@ -53,8 +53,4 @@ public class Gtk4ListClock.MainWindow : Gtk.ApplicationWindow {
 
         clock_info_display.set_time_zone_info (timezone_info);
     }
-
-    public static string convert_time_to_string (Object image, DateTime time) {
-        return time.format ("%x\n%X");
-    }
 }
