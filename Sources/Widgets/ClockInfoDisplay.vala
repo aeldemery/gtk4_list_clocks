@@ -1,5 +1,5 @@
 // Copyright (c) 2021 Ahmed Eldemery
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -33,9 +33,9 @@ public class Gtk4ListClock.ClockInfoDisplay : Gtk.Widget {
         flags_label.width_chars = 5;
         flags_label.max_width_chars = 5;
         flags_label.ellipsize = Pango.EllipsizeMode.END;
-        
+
         time_label = new Gtk.Label ("==");
-        
+
         clock_face = new ClockFace ();
 
         vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 4);

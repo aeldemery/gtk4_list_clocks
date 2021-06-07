@@ -27,7 +27,7 @@ public class Gtk4ListClock.ClockApp : Gtk.Application {
     }
 
     protected override void open (GLib.File[] files, string hint) {
-    }    
+    }
 }
 
 int main (string[] args) {

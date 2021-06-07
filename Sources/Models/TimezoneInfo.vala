@@ -1,5 +1,5 @@
 // Copyright (c) 2021 Ahmed Eldemery
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -12,7 +12,7 @@ public class Gtk4ListClock.TimezoneInfo : GLib.Object {
         if (countries.contains (",")) {
             country_list = countries.split (",");
         } else {
-            country_list = {countries};
+            country_list = { countries };
         }
     }
 
