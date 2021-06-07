@@ -1,5 +1,5 @@
 // Copyright (c) 2021 Ahmed Eldemery
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -25,10 +25,12 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         }
     }
 
+    static construct {
+        set_css_name ("clock");
+    }
+
     public ClockFace (string ? time_zone = null) {
         set_time_zone (time_zone);
-        // sets a minimum size for this widget.
-        //this.set_size_request (200, 200);
         start_ticking ();
     }
 
@@ -63,7 +65,8 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         var w = this.get_width ();
         var h = this.get_height ();
 
-        Gdk.RGBA black = { 0, 0, 0, 1 };
+        var context = this.get_style_context ();
+        var foreground_color = context.get_color ();
 
         /* save/restore() is necessary so we can undo the transforms we start
          * out with.
@@ -93,7 +96,10 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
          * without requiring Cairo.
          */
         outline.init_from_rect ({ { -50, -50 }, { 100, 100 } }, 50f);
-        snapshot.append_border (outline, /*Width of each boarder */ { 4, 4, 4, 4 }, { black, black, black, black });
+        snapshot.append_border (
+            outline,
+            /*Width of each boarder */ { 4, 4, 4, 4 },
+            { foreground_color, foreground_color, foreground_color, foreground_color });
 
         /* Next, draw the hour hand.
          * We do this using tranforms again: Instead of computing where the angle
@@ -105,7 +111,7 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         snapshot.rotate (30 * now.get_hour () + 0.5f * now.get_minute ());
         outline.init_from_rect ({ { -2, -23 }, { 4, 25 } }, 2f);
         snapshot.push_rounded_clip (outline);
-        snapshot.append_color (black, outline.bounds);
+        snapshot.append_color (foreground_color, outline.bounds);
         snapshot.pop ();
         snapshot.restore ();
 
@@ -116,7 +122,7 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         snapshot.rotate (6 * now.get_minute ());
         outline.init_from_rect ({ { -2, -43 }, { 4, 45 } }, 2f);
         snapshot.push_rounded_clip (outline);
-        snapshot.append_color (black, outline.bounds);
+        snapshot.append_color (foreground_color, outline.bounds);
         snapshot.pop ();
         snapshot.restore ();
 
@@ -125,7 +131,7 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         snapshot.rotate (6 * now.get_second ());
         outline.init_from_rect ({ { -2, -43 }, { 4, 10 } }, 2f);
         snapshot.push_rounded_clip (outline);
-        snapshot.append_color (black, outline.bounds);
+        snapshot.append_color (foreground_color, outline.bounds);
         snapshot.pop ();
         snapshot.restore ();
 
@@ -162,14 +168,14 @@ public class Gtk4ListClock.ClockFace : Gtk.Widget {
         }
     }
 
-    protected override void measure (Gtk.Orientation orientation, 
-        int for_size, 
-        out int minimum, 
-        out int natural, 
-        out int minimum_baseline, 
-        out int natural_baseline) {
-            minimum = 100;
-            natural = 100;
-            minimum_baseline = natural_baseline = -1;
+    protected override void measure (Gtk.Orientation orientation,
+                                     int for_size,
+                                     out int minimum,
+                                     out int natural,
+                                     out int minimum_baseline,
+                                     out int natural_baseline) {
+        minimum = 100;
+        natural = 100;
+        minimum_baseline = natural_baseline = -1;
     }
 }
